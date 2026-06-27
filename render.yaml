@@ -15,11 +15,11 @@ services:
       - key: FRONTEND_URL
         fromService:
           type: web
-          name: 3tech-frontend
+          name: 3techcranesandlifts
           envVarKey: RENDER_EXTERNAL_URL
 
   - type: web
-    name: 3tech-frontend
+    name: 3techcranesandlifts
     env: static
     rootDir: frontend
     buildCommand: npm install && npm run build
