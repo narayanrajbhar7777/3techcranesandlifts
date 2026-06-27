@@ -6,10 +6,7 @@ services:
     rootDir: backend
     buildCommand: npm install && npm run build
     startCommand: npm run start
-    disk:
-      name: uploads
-      mountPath: /opt/render/project/src/backend/uploads
-      sizeGB: 1
+    plan: free
     envVars:
       - key: DATABASE_URL
         sync: false
