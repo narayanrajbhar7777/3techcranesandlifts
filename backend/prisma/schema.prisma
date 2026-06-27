@@ -1,0 +1,199 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             Int         @id @default(autoincrement())
+  username       String      @unique
+  password       String
+  role           String
+  profilePicture String?
+  
+  employeeId     Int?        @unique
+  employee       Employee?   @relation(fields: [employeeId], references: [id])
+  
+  tasksScheduled DailyTask[] @relation("ScheduledByUser")
+  
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Role {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+}
+
+model Department {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+}
+
+model Designation {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+}
+
+model EmploymentType {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+}
+
+model Employee {
+  id                 Int             @id @default(autoincrement())
+  employeeCode       String          @unique
+  name               String
+  nickName           String?
+  mobileNo           String
+  emergencyContactNo String
+  email              String          @unique
+  photo              String?
+  
+  roleId             Int
+  role               Role            @relation(fields: [roleId], references: [id])
+  
+  departmentId       Int
+  department         Department      @relation(fields: [departmentId], references: [id])
+  
+  designationId      Int
+  designation        Designation     @relation(fields: [designationId], references: [id])
+
+  employmentTypeId   Int
+  employmentType     EmploymentType  @relation(fields: [employmentTypeId], references: [id])
+
+  address            EmployeeAddress?
+  documents          EmployeeDocument[]
+
+  dob                DateTime
+  doj                DateTime
+
+  // Enterprise Status & Management
+  isActive           Boolean         @default(true)
+  status             String          @default("ACTIVE") // "ACTIVE", "INACTIVE", "DRAFT"
+  
+  reportingManagerId Int?
+  reportingManager   Employee?       @relation("ManagerToEmployee", fields: [reportingManagerId], references: [id])
+  reportees          Employee[]      @relation("ManagerToEmployee")
+
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  // HRMS Relations
+  leaveRequests      LeaveRequest[]
+  attendances        Attendance[]
+  payslips           Payslip[]
+  dailyTasks         DailyTask[]
+  user               User?
+}
+
+model EmployeeAddress {
+  id               Int      @id @default(autoincrement())
+  employeeId       Int      @unique
+  employee         Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  // Current Address
+  currentStreet    String
+  currentPin       String
+  currentCity      String
+  currentDist      String
+  currentState     String
+  currentCountry   String
+
+  // Permanent Address
+  permanentStreet  String
+  permanentPin     String
+  permanentCity    String
+  permanentDist    String
+  permanentState   String
+  permanentCountry String
+}
+
+model EmployeeDocument {
+  id           Int      @id @default(autoincrement())
+  employeeId   Int
+  employee     Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  documentName String
+  documentPath String
+  originalName String
+  mimeType     String
+  size         Int
+  
+  createdAt    DateTime @default(now())
+}
+
+model LeaveRequest {
+  id          Int      @id @default(autoincrement())
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType   String
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Attendance {
+  id           Int      @id @default(autoincrement())
+  employeeId   Int
+  employee     Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date         DateTime
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+  status       String   @default("PRESENT")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([employeeId, date])
+}
+
+model Payslip {
+  id          Int      @id @default(autoincrement())
+  employeeId  Int
+  employee    Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  month       Int
+  year        Int
+  basicSalary Float
+  allowances  Float    @default(0)
+  deductions  Float    @default(0)
+  netSalary   Float
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([employeeId, month, year])
+}
+
+model DailyTask {
+  id              Int      @id @default(autoincrement())
+  
+  employeeId      Int
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  area            String   // "Plant" or "Site"
+  location        String   // Plant list or Site list
+  
+  fromDateTime    DateTime
+  toDateTime      DateTime
+  
+  taskTitle       String
+  taskDescription String   @db.Text
+  priority        String   // "High", "Medium", "Low"
+  
+  scheduledById   Int
+  scheduledBy     User     @relation("ScheduledByUser", fields: [scheduledById], references: [id])
+  
+  status          String   @default("PENDING") // "PENDING", "IN_PROGRESS", "COMPLETED"
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

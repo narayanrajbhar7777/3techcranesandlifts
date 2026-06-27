@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #059669;
+  --color-primary-dark: #047857;
+  --color-sidebar: #064e3b;
+  --color-sidebar-active: #059669;
+  --color-background: #f9fafb;
+  --color-surface: #ffffff;
+  
+  --color-header: #ffffff;
+  --color-stat-card: #ffffff;
+  --color-main-card: #ffffff;
+  --color-footer: #ffffff;
+  --color-button: #059669;
+  --color-table: #ffffff;
+  --color-form: #ffffff;
+  --color-nav-menu: #064e3b;
+  --color-icon: #059669;
+  --color-link: #059669;
+  
+  --text-header: #1f2937;
+  --text-sidebar: #ffffff;
+  --text-stat-card: #1f2937;
+  --text-main-card: #1f2937;
+  --text-button: #ffffff;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: #1f2937;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Fix for Material UI and Tailwind CSS preflight conflict causing labels to overlap borders */
+fieldset.MuiOutlinedInput-notchedOutline legend {
+  display: block;
+}
