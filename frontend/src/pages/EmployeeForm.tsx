@@ -58,8 +58,8 @@ const EmployeeForm = ({ employeeId, onComplete, onCancel }: { employeeId?: numbe
         const docs: { type: string; url: string; originalName?: string; mimeType?: string; size?: number }[] = [];
         if (data.documents && Array.isArray(data.documents)) {
           data.documents.forEach((doc: any) => {
-            docs.push({ 
-              type: doc.documentName, 
+            docs.push({
+              type: doc.documentName,
               url: doc.documentPath,
               originalName: doc.originalName,
               mimeType: doc.mimeType,
@@ -67,7 +67,7 @@ const EmployeeForm = ({ employeeId, onComplete, onCancel }: { employeeId?: numbe
             });
           });
         }
-        
+
         if (data.address) {
           data.currentStreet = data.address.currentStreet || '';
           data.currentPin = data.address.currentPin || '';
@@ -165,8 +165,8 @@ const EmployeeForm = ({ employeeId, onComplete, onCancel }: { employeeId?: numbe
   const handleDynamicFileUpload = async (file: File) => {
     try {
       const data = await uploadDocument(file);
-      setDynamicDocuments((prev) => [...prev, { 
-        type: documentType, 
+      setDynamicDocuments((prev) => [...prev, {
+        type: documentType,
         url: data.url,
         originalName: data.originalName,
         mimeType: data.mimeType,
@@ -208,7 +208,7 @@ const EmployeeForm = ({ employeeId, onComplete, onCancel }: { employeeId?: numbe
     }
     setLoading(true);
     const mappedPayload = { ...formData, status };
-    
+
     // Map dynamic documents to backend format
     mappedPayload.documents = dynamicDocuments.map(doc => ({
       documentName: doc.type,
@@ -454,7 +454,7 @@ const EmployeeForm = ({ employeeId, onComplete, onCancel }: { employeeId?: numbe
                             const filename = doc.originalName || (doc.url.split('/').pop() || 'document');
                             const fullUrl = doc.url.startsWith('http') ? doc.url : `http://localhost:5000${doc.url}`;
                             const sizeText = doc.size ? `${(doc.size / 1024).toFixed(1)} KB` : 'N/A';
-                            
+
                             return (
                               <TableRow key={idx} hover>
                                 <TableCell>{idx + 1}</TableCell>
