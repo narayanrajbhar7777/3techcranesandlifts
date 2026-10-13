@@ -1,14 +1,29 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { Pool } from 'pg';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 const connectionString = `${process.env.DATABASE_URL}`;
-const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool);
+
+function parseConnection(url: string) {
+  const parsed = new URL(url.replace(/^mariadb:\/\//, 'mysql://'));
+  const sslParam = parsed.searchParams.get('ssl');
+  const useSsl = sslParam !== 'false';
+
+  return {
+    host: parsed.hostname,
+    port: parsed.port ? Number(parsed.port) : 3306,
+    user: decodeURIComponent(parsed.username),
+    password: decodeURIComponent(parsed.password),
+    database: parsed.pathname.replace(/^\//, '') || undefined,
+    ssl: useSsl ? true : undefined,
+    connectionLimit: 5,
+  };
+}
+
+const adapter = new PrismaMariaDb(parseConnection(connectionString));
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
@@ -59,7 +74,7 @@ async function main() {
   for (const name of designations) {
     await prisma.designation.upsert({ where: { name }, update: {}, create: { name } });
   }
-  
+
   console.log('Master data seeded.');
   console.log('Seeding completed successfully.');
 }
