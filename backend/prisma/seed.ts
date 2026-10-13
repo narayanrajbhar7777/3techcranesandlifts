@@ -61,16 +61,6 @@ async function main() {
   }
   
   console.log('Master data seeded.');
-
-  // Remove dummy records if any exist (safety measure)
-  await prisma.employeeDocument.deleteMany({});
-  await prisma.employeeAddress.deleteMany({});
-  await prisma.attendance.deleteMany({});
-  await prisma.leaveRequest.deleteMany({});
-  await prisma.payslip.deleteMany({});
-  await prisma.employee.deleteMany({});
-  
-  console.log('Dummy employees cleaned up.');
   console.log('Seeding completed successfully.');
 }
 
