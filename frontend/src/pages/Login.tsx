@@ -19,10 +19,10 @@ const Login = () => {
     setError('');
     try {
       const data = await login({ username, password });
-      
+
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      
+
       navigate('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Invalid credentials');
@@ -31,21 +31,25 @@ const Login = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative bg-black"
+    <div
+      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative"
       style={{
         backgroundImage: 'url(/bg_crane.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay',
-        backgroundColor: 'rgba(0, 0, 0, 0.65)'
+        backgroundColor: '#1b1e24',
       }}
     >
+      {/* Dark soft scrim so the light neumorphic panel pops */}
+      <div className="absolute inset-0 bg-black/60" />
+
       <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-center text-white z-10">
         <div className="flex items-center gap-3">
-          <Factory size={32} className="text-yellow-500" />
+          <div className="neu-icon-inset p-2" style={{ boxShadow: 'var(--neu-out-sm)' }}>
+            <Factory size={26} className="text-emerald-400" />
+          </div>
           <div>
-            <h1 className="text-xl font-bold tracking-wider uppercase">3Tech Cranes and Lift Pvt. Ltd.</h1>
+            <h1 className="text-xl font-bold tracking-wider uppercase drop-shadow">3Tech Cranes and Lift Pvt. Ltd.</h1>
             <p className="text-sm text-gray-300">Boisar</p>
           </div>
         </div>
@@ -61,28 +65,24 @@ const Login = () => {
           </p>
         </div>
 
-        <div className="bg-white py-8 px-4 shadow-2xl sm:rounded-xl sm:px-10 border-t-4 border-yellow-500 relative overflow-hidden">
-          <form className="space-y-6 relative z-10" onSubmit={handleLogin}>
+        <div className="neu-card py-8 px-6 sm:px-10">
+          <form className="space-y-6" onSubmit={handleLogin}>
             {error && (
-              <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
-                <div className="flex">
-                  <div className="ml-3">
-                    <p className="text-sm text-red-700">{error}</p>
-                  </div>
-                </div>
+              <div className="neu-inset-sm px-4 py-3 border-l-4 border-red-500">
+                <p className="text-sm font-medium text-red-600">{error}</p>
               </div>
             )}
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700">Username</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <label className="block text-sm font-semibold text-[color:var(--neu-text)]">Username</label>
+              <div className="mt-2 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
+                  <User className="h-5 w-5 text-[color:var(--neu-muted)]" />
                 </div>
                 <input
                   type="text"
                   required
-                  className="pl-10 block w-full py-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm transition-all"
+                  className="neu-input pl-10 pr-3 block w-full py-3 text-sm"
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -92,15 +92,15 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <label className="block text-sm font-semibold text-[color:var(--neu-text)]">Password</label>
+              <div className="mt-2 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+                  <Lock className="h-5 w-5 text-[color:var(--neu-muted)]" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
-                  className="pl-10 pr-10 block w-full py-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm transition-all"
+                  className="neu-input pl-10 pr-10 block w-full py-3 text-sm"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -110,7 +110,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                    className="text-[color:var(--neu-muted)] hover:text-[color:var(--neu-text)] focus:outline-none"
                     disabled={loading}
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -125,18 +125,18 @@ const Login = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
+                  className="h-4 w-4 accent-emerald-600"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                   disabled={loading}
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 cursor-pointer">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-[color:var(--neu-text)] cursor-pointer">
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-yellow-600 hover:text-yellow-500">
+                <a href="#" className="font-semibold text-emerald-600 hover:text-emerald-500">
                   Forgot your password?
                 </a>
               </div>
@@ -146,7 +146,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-gray-900 bg-yellow-500 hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                className="neu-btn-primary w-full flex justify-center py-3 px-4 text-sm disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -161,7 +161,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-      
+
       <div className="absolute bottom-0 left-0 w-full p-4 flex justify-between items-center text-gray-400 text-xs z-10">
         <p>&copy; 2026 3Tech Cranes and Lift Pvt. Ltd. All rights reserved.</p>
         <p>v1.0.0 (Build 42)</p>

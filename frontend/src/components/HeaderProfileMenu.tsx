@@ -34,38 +34,37 @@ const HeaderProfileMenu = () => {
     <div className="relative" ref={menuRef}>
       <button 
         onClick={() => setOpen(!open)}
-        className="flex items-center space-x-2 bg-gray-50 border border-gray-200 rounded-full py-1 pl-1 pr-3 hover:bg-gray-100 transition-colors focus:outline-none"
+        className="neu-btn flex items-center space-x-2 rounded-full py-1 pl-1 pr-3 focus:outline-none"
       >
         <div className="h-8 w-8 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center font-bold">
           {username.charAt(0).toUpperCase()}
         </div>
-        <span className="text-sm font-medium text-gray-700">{username}</span>
+        <span className="text-sm font-medium text-[color:var(--neu-text)]">{username}</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-gray-100 z-50">
-          <div className="px-4 py-2 border-b border-gray-100">
-            <p className="text-sm font-medium text-gray-900 truncate">{username}</p>
-            <p className="text-xs text-gray-500 truncate">{user?.role || 'Role'}</p>
+        <div className="neu-card absolute right-0 mt-3 w-52 p-2 z-50">
+          <div className="px-3 py-2 mb-1">
+            <p className="text-sm font-semibold text-[color:var(--neu-text)] truncate">{username}</p>
+            <p className="text-xs text-[color:var(--neu-muted)] truncate">{user?.role || 'Role'}</p>
           </div>
           <button 
             onClick={() => { setOpen(false); setModalOpen(true); }}
-            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
+            className="w-full text-left px-3 py-2 text-sm flex items-center space-x-2 rounded-lg text-[color:var(--neu-text)] hover:bg-black/5 transition-colors"
           >
             <User size={16} />
             <span>My Profile</span>
           </button>
           <button 
-            onClick={() => { setOpen(false); setModalOpen(true); }} // Use same modal for now, tabbed
-            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
+            onClick={() => { setOpen(false); setModalOpen(true); }}
+            className="w-full text-left px-3 py-2 text-sm flex items-center space-x-2 rounded-lg text-[color:var(--neu-text)] hover:bg-black/5 transition-colors"
           >
             <Key size={16} />
             <span>Change Password</span>
           </button>
-          <div className="border-t border-gray-100 my-1"></div>
           <button 
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
+            className="w-full text-left px-3 py-2 mt-1 text-sm text-red-500 flex items-center space-x-2 rounded-lg hover:bg-red-500/10 transition-colors"
           >
             <LogOut size={16} />
             <span>Logout</span>

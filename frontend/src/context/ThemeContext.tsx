@@ -49,30 +49,33 @@ const ThemeContext = createContext<ThemeContextType>({} as ThemeContextType);
 
 export const useThemeContext = () => useContext(ThemeContext);
 
+const NEU_LIGHT_BG = '#e0e5ec';
+const NEU_DARK_BG = '#1c1f26';
+
 const DEFAULT_LIGHT = {
-  sidebarColor: '#064e3b',
-  headerColor: '#ffffff',
-  statCardColor: '#ffffff',
-  mainCardColor: '#ffffff',
-  footerColor: '#ffffff',
+  sidebarColor: '#2b303b',
+  headerColor: NEU_LIGHT_BG,
+  statCardColor: NEU_LIGHT_BG,
+  mainCardColor: NEU_LIGHT_BG,
+  footerColor: NEU_LIGHT_BG,
   buttonColor: '#059669',
-  tableColor: '#ffffff',
-  formColor: '#ffffff',
-  navMenuColor: '#064e3b',
+  tableColor: NEU_LIGHT_BG,
+  formColor: NEU_LIGHT_BG,
+  navMenuColor: '#2b303b',
   iconColor: '#059669',
   linkColor: '#059669',
 };
 
 const DEFAULT_DARK = {
-  sidebarColor: '#121212',
-  headerColor: '#1e1e1e',
-  statCardColor: '#1e1e1e',
-  mainCardColor: '#1e1e1e',
-  footerColor: '#1e1e1e',
+  sidebarColor: NEU_DARK_BG,
+  headerColor: NEU_DARK_BG,
+  statCardColor: NEU_DARK_BG,
+  mainCardColor: NEU_DARK_BG,
+  footerColor: NEU_DARK_BG,
   buttonColor: '#10b981',
-  tableColor: '#1e1e1e',
-  formColor: '#1e1e1e',
-  navMenuColor: '#121212',
+  tableColor: NEU_DARK_BG,
+  formColor: NEU_DARK_BG,
+  navMenuColor: NEU_DARK_BG,
   iconColor: '#10b981',
   linkColor: '#10b981',
 };
@@ -81,16 +84,16 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const [mode, setModeState] = useState<ThemeMode>(() => (localStorage.getItem('themeMode') as ThemeMode) || 'light');
   const [primaryColor, setPrimaryColorState] = useState<string>(() => localStorage.getItem('themeColor') || '#059669');
   
-  const [sidebarColor, setSidebarColorState] = useState<string>(() => localStorage.getItem('sidebarColor') || '#064e3b');
-  const [headerColor, setHeaderColorState] = useState<string>(() => localStorage.getItem('headerColor') || '#ffffff');
-  const [statCardColor, setStatCardColorState] = useState<string>(() => localStorage.getItem('statCardColor') || '#ffffff');
-  const [mainCardColor, setMainCardColorState] = useState<string>(() => localStorage.getItem('mainCardColor') || '#ffffff');
-  const [footerColor, setFooterColorState] = useState<string>(() => localStorage.getItem('footerColor') || '#ffffff');
+  const [sidebarColor, setSidebarColorState] = useState<string>(() => localStorage.getItem('sidebarColor') || '#2b303b');
+  const [headerColor, setHeaderColorState] = useState<string>(() => localStorage.getItem('headerColor') || NEU_LIGHT_BG);
+  const [statCardColor, setStatCardColorState] = useState<string>(() => localStorage.getItem('statCardColor') || NEU_LIGHT_BG);
+  const [mainCardColor, setMainCardColorState] = useState<string>(() => localStorage.getItem('mainCardColor') || NEU_LIGHT_BG);
+  const [footerColor, setFooterColorState] = useState<string>(() => localStorage.getItem('footerColor') || NEU_LIGHT_BG);
   
   const [buttonColor, setButtonColorState] = useState<string>(() => localStorage.getItem('buttonColor') || '#059669');
-  const [tableColor, setTableColorState] = useState<string>(() => localStorage.getItem('tableColor') || '#ffffff');
-  const [formColor, setFormColorState] = useState<string>(() => localStorage.getItem('formColor') || '#ffffff');
-  const [navMenuColor, setNavMenuColorState] = useState<string>(() => localStorage.getItem('navMenuColor') || '#064e3b');
+  const [tableColor, setTableColorState] = useState<string>(() => localStorage.getItem('tableColor') || NEU_LIGHT_BG);
+  const [formColor, setFormColorState] = useState<string>(() => localStorage.getItem('formColor') || NEU_LIGHT_BG);
+  const [navMenuColor, setNavMenuColorState] = useState<string>(() => localStorage.getItem('navMenuColor') || '#2b303b');
   const [iconColor, setIconColorState] = useState<string>(() => localStorage.getItem('iconColor') || '#059669');
   const [linkColor, setLinkColorState] = useState<string>(() => localStorage.getItem('linkColor') || '#059669');
 
@@ -114,12 +117,12 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const isDark = mode === 'dark' || (mode === 'custom' && getContrastTextColor(mainCardColor) === '#ffffff');
     if (isDark) {
       document.documentElement.classList.add('dark');
-      document.body.style.backgroundColor = '#121212';
-      document.documentElement.style.setProperty('--color-background', '#121212');
+      document.body.style.backgroundColor = NEU_DARK_BG;
+      document.documentElement.style.setProperty('--color-background', NEU_DARK_BG);
     } else {
       document.documentElement.classList.remove('dark');
-      document.body.style.backgroundColor = '#f9fafb';
-      document.documentElement.style.setProperty('--color-background', '#f9fafb');
+      document.body.style.backgroundColor = NEU_LIGHT_BG;
+      document.documentElement.style.setProperty('--color-background', NEU_LIGHT_BG);
     }
     
     const active = mode === 'light' ? DEFAULT_LIGHT : mode === 'dark' ? DEFAULT_DARK : {
@@ -173,58 +176,134 @@ export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
         fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
         button: { textTransform: 'none', fontWeight: 600 },
       },
-      shape: { borderRadius: 8 },
+      shape: { borderRadius: 14 },
       components: {
         MuiButton: {
+          defaultProps: { disableElevation: true },
           styleOverrides: {
-            root: { borderRadius: '8px', padding: '8px 16px' },
-            contained: { backgroundColor: active.buttonColor, color: getContrastTextColor(active.buttonColor) },
-            outlined: { borderColor: active.buttonColor, color: active.buttonColor }
+            root: {
+              borderRadius: '12px',
+              padding: '8px 18px',
+              fontWeight: 600,
+              transition: 'box-shadow .18s ease, transform .08s ease, filter .18s ease',
+            },
+            contained: {
+              backgroundColor: active.buttonColor,
+              color: getContrastTextColor(active.buttonColor),
+              boxShadow: 'var(--neu-out-sm)',
+              '&:hover': { boxShadow: 'var(--neu-out)', filter: 'brightness(1.05)' },
+              '&:active': { boxShadow: 'var(--neu-in-sm)', transform: 'translateY(1px)' },
+            },
+            outlined: {
+              borderColor: 'transparent',
+              color: getContrastTextColor(active.mainCardColor),
+              backgroundColor: 'var(--neu-bg)',
+              boxShadow: 'var(--neu-out-sm)',
+              '&:hover': { borderColor: 'transparent', boxShadow: 'var(--neu-out)' },
+              '&:active': { boxShadow: 'var(--neu-in-sm)', transform: 'translateY(1px)' },
+            },
+            text: {
+              color: getContrastTextColor(active.mainCardColor),
+              '&:hover': { backgroundColor: 'transparent', boxShadow: 'var(--neu-out-sm)' },
+            },
           },
         },
         MuiPaper: {
           styleOverrides: {
             root: {
-              boxShadow: isDark ? 'none' : '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+              boxShadow: 'var(--neu-out)',
               backgroundImage: 'none',
-              borderRadius: '12px',
+              borderRadius: '18px',
               backgroundColor: active.mainCardColor,
               color: getContrastTextColor(active.mainCardColor),
+            },
+          },
+        },
+        MuiIconButton: {
+          styleOverrides: {
+            root: {
+              borderRadius: '12px',
+              boxShadow: 'var(--neu-out-sm)',
+              '&:active': { boxShadow: 'var(--neu-in-sm)' },
             },
           },
         },
         MuiTableCell: {
           styleOverrides: {
             root: {
-              backgroundColor: active.tableColor,
+              backgroundColor: 'transparent',
               color: getContrastTextColor(active.tableColor),
-              borderColor: isDark ? '#333' : '#e5e7eb',
-            }
-          }
+              borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(163,177,198,0.35)',
+            },
+            head: {
+              fontWeight: 700,
+              color: getContrastTextColor(active.tableColor),
+            },
+          },
+        },
+        MuiTableContainer: {
+          styleOverrides: {
+            root: { backgroundColor: 'transparent' },
+          },
+        },
+        MuiOutlinedInput: {
+          styleOverrides: {
+            root: {
+              backgroundColor: 'var(--neu-bg)',
+              borderRadius: '12px',
+              boxShadow: 'var(--neu-in-sm)',
+              transition: 'box-shadow .18s ease',
+              '& .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
+              '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'transparent' },
+              '&.Mui-focused': {
+                boxShadow: `var(--neu-in-sm), 0 0 0 2px ${active.buttonColor}66`,
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'transparent',
+                borderWidth: 0,
+              },
+            },
+          },
         },
         MuiTextField: {
           styleOverrides: {
             root: {
-              backgroundColor: active.formColor,
-              borderRadius: '8px',
-            }
-          }
+              borderRadius: '12px',
+            },
+          },
         },
         MuiInputBase: {
           styleOverrides: {
             root: {
               color: getContrastTextColor(active.formColor),
-            }
-          }
+            },
+          },
         },
         MuiFormLabel: {
           styleOverrides: {
             root: {
               color: getContrastTextColor(active.formColor),
               opacity: 0.8,
-            }
-          }
-        }
+            },
+          },
+        },
+        MuiDataGrid: {
+          styleOverrides: {
+            root: {
+              border: 'none',
+              backgroundColor: 'transparent',
+              borderRadius: '18px',
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: 'transparent',
+                borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(163,177,198,0.35)',
+              },
+              '& .MuiDataGrid-cell': {
+                borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(163,177,198,0.25)',
+              },
+              '& .MuiDataGrid-footerContainer': { borderTop: 'none' },
+            },
+          },
+        },
       },
     });
   }, [mode, sidebarColor, headerColor, statCardColor, mainCardColor, footerColor, buttonColor, tableColor, formColor, navMenuColor, iconColor, linkColor]);
