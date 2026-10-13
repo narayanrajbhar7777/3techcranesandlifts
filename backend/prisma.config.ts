@@ -3,12 +3,22 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+// TiDB Cloud (and most secure MySQL endpoints) reject insecure transport.
+// Automatically request TLS unless the URL already specifies it.
+function withTls(url?: string) {
+  if (!url) return url;
+  if (/tidbcloud\.com/i.test(url) && !/[?&]sslaccept=/i.test(url)) {
+    return url + (url.includes("?") ? "&" : "?") + "sslaccept=strict";
+  }
+  return url;
+}
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: withTls(process.env["DATABASE_URL"]),
   },
 });
